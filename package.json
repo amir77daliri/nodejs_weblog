@@ -20,10 +20,14 @@
   },
   "homepage": "https://github.com/amir77daliri/nodejs_weblog#readme",
   "dependencies": {
+    "bootstrap-v4-rtl": "^4.6.2-1",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
-    "mongoose": "^6.9.0"
+    "font-awesome": "^4.7.0",
+    "i": "^0.3.7",
+    "mongoose": "^6.9.0",
+    "npm": "^9.4.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3"
