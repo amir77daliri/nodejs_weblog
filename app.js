@@ -1,10 +1,10 @@
 const path = require('path');
 
 const express = require('express');
+const expressLayout = require('express-ejs-layouts');
 const dotEnv = require('dotenv');
 
 const connectDB = require('./config/db');
-const indexRoutes = require('./routes/index');
 
 
 // Load Config --> 
@@ -19,19 +19,30 @@ const app = express();
 
 
 // View Engine :
+app.use(expressLayout);
 app.set("view engine", "ejs");
+app.set("layout", "./layouts/mainLayout");
 app.set("views", "views");
 // End View Engine Config
 
+// BodyParser
+app.use(express.urlencoded({extended: false}));
 
 // Set Static
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "node_modules", "bootstrap-v4-rtl", "dist")))
-app.use(express.static(path.join(__dirname, "node_modules", "font-awesome")))
 
 
 // Start routes
-app.use(indexRoutes);
+app.use('/', require('./routes/blog'));
+app.use('/dashboard', require('./routes/dashboard'));
+app.use('/users', require('./routes/users'));
+
+app.use((req, res) => {
+    res.render('404', {
+        pageTitle: "صفحه یافت نشد || 404",
+        path: '/404'
+    })
+})
 // End routes
 
 
