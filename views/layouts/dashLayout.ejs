@@ -25,10 +25,20 @@
                 }
             }
         </style>
-        <link rel="stylesheet" href="/css/dashboard.css"  />
+        <link href="/css/dashboard.css" rel="stylesheet" />
         <link rel="stylesheet" href="/css/styles.css" />
     </head>
     <body class="rtl">
-        <%- body %>
+        <%- include("../private/dashNavbar") %>
+        <div class="container-fluid">
+            <div class="row">
+                <%- include('../private/dashSidebar.ejs') %>
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                    <%- body %>
+                </main>
+            </div>
+        </div>
+        <script src="/js/jquery.slim.min.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

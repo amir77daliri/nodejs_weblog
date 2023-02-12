@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const validateSchema = require('../utils/validations/userValidateSchema');
-const { use } = require('passport');
+
 
 const userSchema = mongoose.Schema({
     fullname: {
@@ -43,6 +43,5 @@ userSchema.pre("save", async function(next) {
     }
 })
 
-const User = mongoose.model("User", userSchema);
 
-module.exports = User;
+module.exports = mongoose.model("User", userSchema);;
