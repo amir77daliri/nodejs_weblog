@@ -1,9 +1,11 @@
 <div style="margin: auto; width: 100%;">
     <form class="form-signin borderStyle" action="/users/login" method="post">
         <h1 class="h3 mb-3 font-weight-normal">ورود به بخش مدیریت</h1>
+        <%- include("./includes/loginMessages") %>
         <label for="inputEmail" class="sr-only">آدرس ایمیل</label>
         <input
             type="email"
+            name="email"
             id="inputEmail"
             class="form-control mb-2"
             placeholder="آدرس ایمیل"
@@ -13,6 +15,7 @@
         <label for="inputPassword" class="sr-only">کلمه عبور</label>
         <input
             type="password"
+            name="password"
             id="inputPassword"
             class="form-control"
             placeholder="کلمه عبور"
@@ -20,7 +23,7 @@
         />
         <div class="checkbox mb-3">
             <label>
-                <input type="checkbox" value="remember-me" /> من را به خاطر بسپار
+                <input name="rememberMe" type="checkbox" value="remember-me" /> من را به خاطر بسپار
             </label>
             <hr>
             <a class="mt-2" href="/users/register">ثبت نام</a>
