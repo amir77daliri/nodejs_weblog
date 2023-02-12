@@ -37,8 +37,8 @@ bower_components
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 # Config Env Variables
-config/
-
+config/db.js
+.env
 # Dependency directories
 node_modules/
 jspm_packages/
