@@ -16,3 +16,7 @@ body {
     border-radius: 4px;
     box-shadow: 2px 2px greenyellow;
 }
+
+.custom-file-input ~ .custom-file-label::after {
+    content:  'انتخاب عکس' !important;
+}

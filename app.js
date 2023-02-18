@@ -41,9 +41,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Session && Flash 
 app.use(session({
-    secret: "secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    unset: "destroy",
     store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
 app.use(flash());  // req.flash
@@ -59,12 +60,7 @@ app.use('/', require('./routes/blog'));
 app.use('/dashboard', require('./routes/dashboard'));
 app.use('/users', require('./routes/users'));
 
-app.use((req, res) => {
-    res.render('404', {
-        pageTitle: "صفحه یافت نشد || 404",
-        path: '/404'
-    })
-})
+app.use(require('./controllers/errorController').get404)
 // End routes
 
 

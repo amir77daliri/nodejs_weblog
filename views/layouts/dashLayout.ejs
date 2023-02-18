@@ -27,6 +27,11 @@
         </style>
         <link href="/css/dashboard.css" rel="stylesheet" />
         <link rel="stylesheet" href="/css/styles.css" />
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.15.1/ckeditor.js"
+            integrity="sha512-aThGT4RJc95+zt2vrs8iMjrFpsJxcFclp7tweVls6/3cNo3GWvGvtLV576o8Kdvdf3fJhrrG3wkmoea/KJMLFQ=="
+            crossorigin="anonymous"
+        ></script>
     </head>
     <body class="rtl">
         <%- include("../private/dashNavbar") %>
@@ -38,6 +43,15 @@
                 </main>
             </div>
         </div>
+        <script>
+            CKEDITOR.replace("body", {
+                language: "fa",
+                
+            })
+        </script>
+        <% if(path === '/dashboard/add-post') { %>
+            <script src="/js/upload.js"></script>
+        <% } %>
         <script src="/js/jquery.slim.min.js"></script>
         <script src="/js/bootstrap.bundle.min.js"></script>
     </body>

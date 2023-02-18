@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const validateSchema = require('../utils/validations/userValidateSchema');
+const userValidationSchema = require('../utils/validations/userValidateSchema');
 
 
 const userSchema = mongoose.Schema({
@@ -28,7 +28,7 @@ const userSchema = mongoose.Schema({
 })
 
 userSchema.statics.userValidation = function(body) {
-    return validateSchema.validate(body, {abortEarly: false})
+    return userValidationSchema.validate(body, {abortEarly: false})
 }
 
 userSchema.pre("save", async function(next) {

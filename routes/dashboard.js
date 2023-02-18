@@ -13,5 +13,7 @@ router.get('/add-post', authenticated, adminController.getAddPost);
 // add post handle route
 router.post('/add-post', authenticated, adminController.createPost);
 
+// handle image uploading
+router.post('/image-upload', authenticated, adminController.uploadImage);
 
 module.exports = router;

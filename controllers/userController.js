@@ -32,7 +32,8 @@ exports.rememberMe = (req, res) => {
 
 
 exports.logout = (req, res) => {
-    req.flash("success_msg", "خروج موفقیت آمیز بود");
+    req.session = null;
+    // req.flash("success_msg", "خروج موفقیت آمیز بود");
     req.logout(err => {return;});
     res.redirect("/users/login");
 }
@@ -45,9 +46,7 @@ exports.register = (req, res) => {
 }
 
 
-
-
-
+// create new user
 exports.createUser = async (req, res) => {
     const errors = [];
     try {

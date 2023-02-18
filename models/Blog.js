@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+const postValidationsSchema = require('../utils/validations/postValidation');
 
 const blogSchema = mongoose.Schema({
     title: {
@@ -7,7 +8,7 @@ const blogSchema = mongoose.Schema({
         required: true,
         trim: true,
         minLength: 5,
-        maxLength: 300
+        maxLength: 100
     },
     body: {
         type: String,
@@ -28,5 +29,8 @@ const blogSchema = mongoose.Schema({
     }
 })
 
+blogSchema.statics.postValidation = function(body) {
+    return postValidationsSchema.validate(body, {abortEarly: false});
+}
 
 module.exports = mongoose.model("Blog", blogSchema);

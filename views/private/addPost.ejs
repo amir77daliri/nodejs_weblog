@@ -1,4 +1,7 @@
 <h3 class="mt-4 text-center ">ساخت پست جدید</h3>
+<div class="w-50 mx-auto">
+    <%- include('../includes/validationMessages') %>
+</div>
 <hr>
 <div class="d-flex align-items-center justify-content-center">
     <form action="/dashboard/add-post" class="w-50" method="POST">
@@ -11,13 +14,38 @@
                 id="title"
             />
         </div>
-
         <div class="form-group">
             <label for="status">وضعیت</label>
             <select name="status" class="form-control w-25" id="status">
                 <option value="عمومی" selected>عمومی</option>
                 <option value="خصوصی">خصوصی</option>
             </select>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button class="btn btn-sm btn-outline-secondary" id="imageUpload" type="button">
+                    آپلود عکس
+                </button>
+            </div>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="selectedImage">
+                <label id="imageStatus" class="custom-file-label" for="selectedImage">
+                    عکس مورد نظر را انتخاب کنید
+                </label>
+            </div>
+        </div>
+        
+        <div id="progressDiv" style="display: none;">
+            <div class="progress">
+                <div 
+                    id="progressBar" 
+                    class="progress-bar progress-bar-striped progress-bar-animated"
+                    role="progressbar"
+                    aria-valuemin="0"
+                    aria-valuemax="100">
+                    
+                </div>
+            </div>
         </div>
 
         <div class="form-group">
