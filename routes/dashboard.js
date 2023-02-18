@@ -4,8 +4,14 @@ const { authenticated } = require('../middleware/auth');
 const adminController = require('../controllers/adminController');
 const router = new Router();
 
-// dashboard page
+// dashboard route
 router.get('/', authenticated, adminController.getDashboard)
+
+// add new post route
+router.get('/add-post', authenticated, adminController.getAddPost);
+
+// add post handle route
+router.post('/add-post', authenticated, adminController.createPost);
 
 
 module.exports = router;
