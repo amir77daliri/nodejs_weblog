@@ -8,7 +8,7 @@ const schema = Yup.object().shape({
         .max(100, "عنوان مقاله نباید  بیشتر از 100 کاراکتر باشد"),
     body: Yup.string()
         .required("محتوا الزامی است"),
-    status: Yup.mixed().oneOf(["عمومی", "خصوصی"], "وضعیت مقاله معتبر نیست")
+    status: Yup.mixed().oneOf(["public", "private"], "وضعیت مقاله معتبر نیست")
 });
 
 

@@ -1,6 +1,6 @@
 const multer = require('multer');
-const {v4: uuid} = require('uuid');
 const sharp = require('sharp');
+const shortId = require('shortid');
 
 const Blog = require('../models/Blog');
 const { formatDate } = require('../utils/jalali');
@@ -74,19 +74,93 @@ exports.uploadImage = (req, res) => {
     
     upload(req, res, async (err) => {
         if(err) {
-            res.send(err)
+            if(err.code === "LIMIT_FILE_SIZE") {
+                return res.status(400).send("حجم عکس ارسالی نباید بیشتر از 4 مگابایت باشد")
+            }
+            res.status(400).send(err)
         } else{
             if(req.file) {
-                console.log(req.file);
-                const fileName = `${uuid()}_${req.file.originalname}`;
+                const fileName = `${shortId.generate()}_${req.file.originalname}`;
                 await sharp(req.file.buffer).jpeg({
                     quality: 60
                 })
                 .toFile(`./public/uploads/${fileName}`)
                 .catch(err => console.log(err));
-                return res.status(200).send("آپلود عکس موفقیت آمیز بود");
+                return res.status(200).send(`http://localhost:3000/public/uploads/${fileName}`);
             }
             res.send("برای آپلود عکسی انتخلب کنید...")
         }
     })
+}
+
+
+//? edit post view :
+exports.getEditPost = async (req, res) => {
+    try {
+        const post = await Blog.findOne({
+            _id : req.params.id
+        })
+        if(post.user.toString() != req.user._id) {
+            return res.redirect('/dashboard')
+        }
+        res.render("private/editPost", {
+            pageTitle: "مدیریت |  ویرایش پست",
+            path: "/dashboard/edit-post",
+            layout: "./layouts/dashLayout",
+            fullname: req.user.fullname,
+            post
+        })
+
+    } catch (err) {
+        return res.redirect('/errors/404');
+    }
+}
+
+
+// handle edit post :
+exports.editPost = async (req, res) => {
+    let errors = [];
+    const post = await Blog.findOne({_id: req.params.id});
+    try {
+        await Blog.postValidation(req.body);
+        if(!post) {
+            return res.redirect("errors/404");
+        }
+        if(post.user.toString() != req.user._id) {
+            return res.redirect('/dashboard');
+        } else {
+            const {title, status, body} = req.body;
+            post.title = title;
+            post.status = status;
+            post.body = body;
+            await post.save();
+            return res.redirect('/dashboard');
+        }
+    } catch (err) {
+        err.inner.forEach(e => {
+            errors.push({
+                name: e.path,
+                message: e.message
+            })
+        })
+        res.render("private/editPost", {
+            pageTitle: "مدیریت | ویرایش پست",
+            path: "/dashboard/edit-post",
+            layout: "./layouts/dashLayout",
+            fullname: req.user.fullname,
+            errors,
+            post
+        })
+    }
+}
+
+
+//? delete post 
+exports.deletePost = async (req, res) => {
+    try {
+        const result = await Blog.findByIdAndRemove(req.params.id)
+        res.redirect('/dashboard')
+    } catch (err) {
+        res.render('errors/500');
+    }
 }
