@@ -9,15 +9,26 @@ const {storage, fileFilter} = require('../utils/multer');
 
 // dashboard page
 exports.getDashboard = async(req, res) => {
+    const page = +req.query.page || 1;
+    const postPerPage = 1;
     try {
-        const blogs = await Blog.find({ user: req.user.id });
+        const numOfPosts = await Blog.find({user: req.user.id}).countDocuments();
+        const blogs = await Blog.find({ user: req.user.id })
+              .skip((page - 1) * postPerPage)
+              .limit(postPerPage);
         res.render('./private/blogs', {
             pageTitle: "مدیریت | داشبورد",
             path: "/dashboard",
             layout: "./layouts/dashLayout",
             fullname: req.user.fullname,
             blogs,
-            formatDate
+            formatDate,
+            currentPage: page,
+            nextPage: page + 1,
+            prevPage: page - 1,
+            hasNextPage: postPerPage * page < numOfPosts ,
+            hasPrevPage: page > 1,
+            lastPage: Math.ceil( numOfPosts / postPerPage )
         })
     } catch (err) {
         get500(req, res);
