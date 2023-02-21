@@ -5,7 +5,7 @@ body {
 
 body {
     display: -ms-flexbox;
-    display: flex;
+    display: flex; 
     -ms-flex-align: center;
     align-items: center;
     padding-top: 40px;
@@ -41,4 +41,17 @@ body {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+
+nav {
+    width: 100%;
+    z-index: 1;
+    position: absolute !important;
+    top: 0 !important;
+}
+
+footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
 }

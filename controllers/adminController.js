@@ -9,10 +9,13 @@ const {storage, fileFilter} = require('../utils/multer');
 
 // dashboard page
 exports.getDashboard = async(req, res) => {
-    const page = +req.query.page || 1;
-    const postPerPage = 1;
+    let page = +req.query.page || 1;
+    const postPerPage = 4;
     try {
         const numOfPosts = await Blog.find({user: req.user.id}).countDocuments();
+        if(postPerPage * page > numOfPosts) {
+            page = Math.ceil( numOfPosts / postPerPage )
+        } 
         const blogs = await Blog.find({ user: req.user.id })
               .skip((page - 1) * postPerPage)
               .limit(postPerPage);
