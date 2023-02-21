@@ -9,6 +9,7 @@ exports.getIndex = async (req, res) => {
         const numOfPosts = await Blog.find().countDocuments();
         if(postPerPage * page > numOfPosts) {
             page = Math.ceil( numOfPosts / postPerPage )
+            if(page === 0) page=1
         } 
         const posts = await Blog
                             .find({status : 'public'})
@@ -26,7 +27,7 @@ exports.getIndex = async (req, res) => {
             prevPage: page - 1,
             hasNextPage: postPerPage * page < numOfPosts ,
             hasPrevPage: page > 1,
-            lastPage: Math.ceil( numOfPosts / postPerPage )
+            lastPage: page !==1 ? Math.ceil( numOfPosts / postPerPage ) : 1
         });
     } catch (err) {
         res.render('errors/500');

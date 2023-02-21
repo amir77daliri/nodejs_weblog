@@ -7,7 +7,7 @@ const blogSchema = mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        minLength: 5,
+        minLength: 4,
         maxLength: 100
     },
     body: {
@@ -18,6 +18,10 @@ const blogSchema = mongoose.Schema({
         type: String,
         default: "public",
         enum: ["public", "private"]
+    },
+    thumbnail: {
+        type: String,
+        required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

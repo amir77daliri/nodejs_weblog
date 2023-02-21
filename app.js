@@ -9,6 +9,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const MongoStore = require('connect-mongo')(session);
+const fileUpload = require('express-fileupload');
 
 const connectDB = require('./config/db');
 
@@ -35,9 +36,13 @@ app.set("views", "views");
 
 // BodyParser
 app.use(express.urlencoded({extended: false}));
+app.use(express.json());
 
 // Set Static
 app.use(express.static(path.join(__dirname, "public")));
+
+// file upload middlware
+app.use(fileUpload());
 
 // Session && Flash 
 app.use(session({
@@ -47,6 +52,7 @@ app.use(session({
     unset: "destroy",
     store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
+
 app.use(flash());  // req.flash
 
 

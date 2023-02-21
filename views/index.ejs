@@ -4,7 +4,9 @@
             <%- include('./includes/blogPost.ejs') %>
 
             <!-- Pagination -->
-            <%- include('./includes/pagination') %>
+            <% if(posts.length > 0) {%>
+                <%- include('./includes/pagination') %>
+            <% }  %>
         </div>
     </div>
 </div>

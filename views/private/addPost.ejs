@@ -4,7 +4,20 @@
 </div>
 <hr>
 <div class="d-flex align-items-center justify-content-center">
-    <form action="/dashboard/add-post" class="w-50" method="POST">
+    <form action="/dashboard/add-post" class="w-50" method="POST" enctype="multipart/form-data">
+        <label for="selectedThumbnail">عکس نمایه</label>
+        <div class="input-group mb-3">
+            <input 
+                type="file" 
+                class="custom-file-input"
+                name="thumbnail"
+                id="selectedThumbnail"
+                aria-describedby="inputGroupFileAddon03" 
+                />
+            <label id="thumbStatus" class="custom-file-label" for="inputGroupFileAddon03">
+                عکس مورد نظر خود را انتخاب کنید
+            </label>
+        </div>
         <div class="form-group">
             <label for="title">عنوان پست</label>
             <input

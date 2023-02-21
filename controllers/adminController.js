@@ -1,6 +1,9 @@
+const fs = require('fs');
+
 const multer = require('multer');
 const sharp = require('sharp');
 const shortId = require('shortid');
+const appRoot = require('app-root-path');
 
 const Blog = require('../models/Blog');
 const { formatDate } = require('../utils/jalali');
@@ -15,6 +18,7 @@ exports.getDashboard = async(req, res) => {
         const numOfPosts = await Blog.find({user: req.user.id}).countDocuments();
         if(postPerPage * page > numOfPosts) {
             page = Math.ceil( numOfPosts / postPerPage )
+            if(page === 0) {page=1}
         } 
         const blogs = await Blog.find({ user: req.user.id })
               .skip((page - 1) * postPerPage)
@@ -53,10 +57,16 @@ exports.getAddPost = (req, res) => {
 
 // create post handle
 exports.createPost = async (req, res) => {
-    let errors = []
+    let errors = [];
+    const thumbnail = req.files ? req.files.thumbnail : {} ;
+    const fileName = `${shortId.generate()}_${thumbnail.name}`;
+    const uploadPath = `${appRoot}/public/uploads/thumbnails/${fileName}`;
+
     try {
+        req.body = {...req.body, thumbnail};
         await Blog.postValidation(req.body);
-        await Blog.create({... req.body, user: req.user.id});
+        await sharp(thumbnail.data).jpeg({quality: 70}).toFile(uploadPath).catch(err => console.log(err))
+        await Blog.create({... req.body, user: req.user.id, thumbnail: fileName});
         res.redirect('/dashboard')
     } catch (err) {
         err.inner.forEach(e => {
@@ -135,18 +145,40 @@ exports.getEditPost = async (req, res) => {
 exports.editPost = async (req, res) => {
     let errors = [];
     const post = await Blog.findOne({_id: req.params.id});
+    const thumbnail = req.files ? req.files.thumbnail : {} ;
+    const fileName = `${shortId.generate()}_${thumbnail.name}`;
+    const uploadPath = `${appRoot}/public/uploads/thumbnails/${fileName}`;
+
     try {
-        await Blog.postValidation(req.body);
+        if(thumbnail.name) {
+            await Blog.postValidation({...req.body, thumbnail});
+        } else {
+            await Blog.postValidation({...req.body, thumbnail: {name: 'placeholder', size: 0, mimeType: 'image/jpeg'}})
+        }
         if(!post) {
             return res.redirect("errors/404");
         }
         if(post.user.toString() != req.user._id) {
             return res.redirect('/dashboard');
         } else {
+            if(thumbnail.name) {
+                fs.unlink(`${appRoot}/public/uploads/thumbnails/${post.thumbnail}`, 
+                    async (err) => {
+                        if(err) { console.log(err) }
+                        else {
+                            await sharp(thumbnail.data)
+                                    .jpeg({quality: 70})
+                                    .toFile(uploadPath)
+                                    .catch(err => console.log(err))
+                                }
+                            });
+                        }
+            
             const {title, status, body} = req.body;
             post.title = title;
             post.status = status;
             post.body = body;
+            post.thumbnail = thumbnail.name ? fileName : post.thumbnail
             await post.save();
             return res.redirect('/dashboard');
         }
