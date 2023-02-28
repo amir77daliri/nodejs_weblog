@@ -204,7 +204,8 @@ exports.editPost = async (req, res) => {
 //? delete post 
 exports.deletePost = async (req, res) => {
     try {
-        const result = await Blog.findByIdAndRemove(req.params.id)
+        const result = await Blog.findByIdAndRemove(req.params.id);
+        fs.unlink(`${appRoot}/public/uploads/thunmbnails/${result.thumbnail}`)
         res.redirect('/dashboard')
     } catch (err) {
         res.render('errors/500');

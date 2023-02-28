@@ -2,9 +2,10 @@ const nodeMailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 
 
+// ? config your own email options
 const transporterDetails = smtpTransport({
     host: "",
-    port: "",
+    port: 465,
     secure: true,
     auth: {
         user: "",
@@ -15,16 +16,19 @@ const transporterDetails = smtpTransport({
     }
 });
 
-const transporter = nodeMailer.createTransport(transporterDetails);
 
-const options = {
-    from: "",
-    to: "",
-    subject: "subject",
-    text: "Simple Text"
+
+exports.sendEmail = (email, fullname, subject, message) => {
+    const transporter = nodeMailer.createTransport(transporterDetails);
+    transporter.sendMail({
+        from: "",
+        to: email,
+        subject,
+        html: `<h1>سلام ${fullname}</h1> 
+               <p>${message}</p>
+            `
+    },(err, info) => {
+        if(err) return console.log(err)
+        console.log(info)
+    })
 }
-
-transporter.sendMail(options, (err, info) => {
-    if(err) return console.log(err)
-    console.log(info);
-})
